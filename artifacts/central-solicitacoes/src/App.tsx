@@ -89,11 +89,10 @@ function Home() {
 
       <main className="page-wrap">
         <section className="intro" aria-labelledby="page-title">
-          <div className="eyebrow">Atendimento acadêmico</div>
+          <div className="eyebrow">Triagem de solicitações</div>
           <h1 id="page-title" className="main-title">Conte o que você precisa.</h1>
           <p className="intro-copy">
-            Envie uma solicitação fictícia e acompanhe a classificação devolvida pelo fluxo de automação.
-            Direto ao ponto, com transparência em cada etapa.
+            Envie sua solicitação e acompanhe o andamento dela. Direto ao ponto, com transparência em cada etapa
           </p>
         </section>
 
