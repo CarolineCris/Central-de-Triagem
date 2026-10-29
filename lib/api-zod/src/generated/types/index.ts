@@ -10,3 +10,4 @@ export * from './healthStatus';
 export * from './triageError';
 export * from './triageInput';
 export * from './triageResult';
+export * from './triageResultCategoria';

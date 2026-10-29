@@ -95,6 +95,12 @@ components:
           type: string
         Categoria:
           type: string
+          enum:
+            - Acesso ao portal
+            - Documentos e certidões
+            - Empréstimo consignado
+            - Processos administrativos
+            - A classificar
         Status:
           type: string
         Resposta_sugerida:

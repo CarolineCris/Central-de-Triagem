@@ -5,11 +5,12 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+import type { TriageResultCategoria } from './triageResultCategoria';
 
 export interface TriageResult {
   Nome: string;
   Mensagem: string;
-  Categoria: string;
+  Categoria: TriageResultCategoria;
   Status: string;
   /** @nullable */
   Resposta_sugerida?: string | null;

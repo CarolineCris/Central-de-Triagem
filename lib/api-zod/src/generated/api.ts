@@ -34,7 +34,7 @@ export const SubmitTriageBody = zod.object({
 export const SubmitTriageResponse = zod.object({
   "Nome": zod.string(),
   "Mensagem": zod.string(),
-  "Categoria": zod.string(),
+  "Categoria": zod.enum(['Acesso ao portal', 'Documentos e certidões', 'Empréstimo consignado', 'Processos administrativos', 'A classificar']),
   "Status": zod.string(),
   "Resposta_sugerida": zod.string().nullish()
 })

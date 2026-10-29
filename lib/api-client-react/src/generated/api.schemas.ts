@@ -22,10 +22,21 @@ export interface TriageInput {
   mensagem: string;
 }
 
+export type TriageResultCategoria = typeof TriageResultCategoria[keyof typeof TriageResultCategoria];
+
+
+export const TriageResultCategoria = {
+  Acesso_ao_portal: 'Acesso ao portal',
+  Documentos_e_certidões: 'Documentos e certidões',
+  Empréstimo_consignado: 'Empréstimo consignado',
+  Processos_administrativos: 'Processos administrativos',
+  A_classificar: 'A classificar',
+} as const;
+
 export interface TriageResult {
   Nome: string;
   Mensagem: string;
-  Categoria: string;
+  Categoria: TriageResultCategoria;
   Status: string;
   /** @nullable */
   Resposta_sugerida?: string | null;
