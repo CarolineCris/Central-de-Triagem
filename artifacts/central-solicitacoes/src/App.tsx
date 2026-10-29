@@ -1,11 +1,11 @@
-import { useState, type FormEvent, type ReactNode } from 'react';
+import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import NotFound from '@/pages/not-found';
 import { useSubmitTriage } from '@workspace/api-client-react';
-import { AlertCircle, ArrowUpRight, ClipboardList, LockKeyhole, Send } from 'lucide-react';
+import { AlertCircle, ArrowUpRight, Clipboard, ClipboardList, LockKeyhole, Send } from 'lucide-react';
 import {
   Route,
   Switch,
@@ -22,6 +22,31 @@ function Home() {
   const [result, setResult] = useState<Awaited<ReturnType<typeof submitTriage.mutateAsync>> | null>(null);
   const [errorMessage, setErrorMessage] = useState('');
   const [validationError, setValidationError] = useState('');
+  const [copyFeedback, setCopyFeedback] = useState<{ message: string; isError: boolean } | null>(null);
+
+  useEffect(() => {
+    if (!copyFeedback) return;
+    const timeoutId = window.setTimeout(() => setCopyFeedback(null), 2200);
+    return () => window.clearTimeout(timeoutId);
+  }, [copyFeedback]);
+
+  const suggestedReply =
+    typeof result?.Resposta_sugerida === 'string' ? result.Resposta_sugerida : '';
+  const hasSuggestedReply = suggestedReply.trim().length > 0;
+
+  async function handleCopyDraft() {
+    if (!hasSuggestedReply) return;
+
+    try {
+      if (!navigator.clipboard?.writeText) {
+        throw new Error('Clipboard API indisponível');
+      }
+      await navigator.clipboard.writeText(suggestedReply);
+      setCopyFeedback({ message: 'Rascunho copiado.', isError: false });
+    } catch {
+      setCopyFeedback({ message: 'Não foi possível copiar. Selecione e copie o texto.', isError: true });
+    }
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -32,6 +57,7 @@ function Home() {
     setValidationError('');
     setErrorMessage('');
     setResult(null);
+    setCopyFeedback(null);
     try {
       const response = await submitTriage.mutateAsync({ data: { nome: nome.trim(), mensagem: mensagem.trim() } });
       setResult(response);
@@ -187,6 +213,41 @@ function Home() {
                     <span className="result-label">Status</span>
                     <span className="status-value" data-testid="status-result">{result.Status}</span>
                   </div>
+                  <section className="suggested-reply" aria-labelledby="suggested-reply-title">
+                    <div className="suggested-reply-heading">
+                      <h3 id="suggested-reply-title" className="suggested-reply-title">
+                        Sugestão de resposta — revisão humana necessária
+                      </h3>
+                      <button
+                        className="copy-button"
+                        type="button"
+                        onClick={handleCopyDraft}
+                        disabled={!hasSuggestedReply}
+                        aria-describedby="copy-feedback"
+                        data-testid="button-copy-draft"
+                      >
+                        <Clipboard size={15} aria-hidden="true" />
+                        Copiar rascunho
+                      </button>
+                    </div>
+                    {hasSuggestedReply ? (
+                      <p className="suggested-reply-content" data-testid="text-suggested-reply">
+                        {suggestedReply}
+                      </p>
+                    ) : (
+                      <p className="suggested-reply-content suggested-reply-empty" data-testid="text-suggested-reply">
+                        Nenhuma sugestão de resposta foi retornada.
+                      </p>
+                    )}
+                    <p
+                      id="copy-feedback"
+                      className={`copy-feedback${copyFeedback?.isError ? ' copy-feedback-error' : ''}`}
+                      role="status"
+                      aria-live="polite"
+                    >
+                      {copyFeedback?.message}
+                    </p>
+                  </section>
                 </div>
               ) : (
                 <div className="result-empty" data-testid="empty-triage-result">

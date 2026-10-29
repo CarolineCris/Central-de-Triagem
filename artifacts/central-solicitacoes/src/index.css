@@ -200,6 +200,31 @@ textarea.field-control { min-height: 158px; padding: 12px 14px; resize: vertical
   background: hsl(203 55% 93%); color: hsl(211 65% 31%); font-size: 12px; font-weight: 700;
 }
 .status-value::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.suggested-reply {
+  min-width: 0; padding: 16px; border: 1px solid hsl(204 42% 85%); border-radius: 12px;
+  background: hsl(204 55% 97%);
+}
+.suggested-reply-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.suggested-reply-title {
+  margin: 0; color: hsl(215 34% 20%); font: 700 14px/1.45 var(--app-font-display);
+  overflow-wrap: anywhere;
+}
+.copy-button {
+  display: inline-flex; flex: none; min-height: 36px; align-items: center; justify-content: center; gap: 7px;
+  padding: 0 10px; border: 1px solid hsl(207 36% 79%); border-radius: 8px;
+  color: hsl(211 65% 31%); background: white; cursor: pointer; font-size: 11px; font-weight: 700;
+  transition: border-color .18s, background .18s;
+}
+.copy-button:hover:not(:disabled) { border-color: hsl(211 77% 39%); background: hsl(203 55% 94%); }
+.copy-button:focus-visible { outline: 3px solid hsl(207 78% 45% / .3); outline-offset: 2px; }
+.copy-button:disabled { opacity: .55; cursor: not-allowed; }
+.suggested-reply-content {
+  margin: 14px 0 0; color: hsl(215 34% 22%); font-size: 13px; line-height: 1.65;
+  white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word;
+}
+.suggested-reply-empty { color: hsl(212 16% 46%); font-style: italic; }
+.copy-feedback { min-height: 16px; margin: 7px 0 0; color: hsl(160 52% 30%); font-size: 11px; }
+.copy-feedback-error { color: hsl(0 56% 39%); }
 .error-state {
   display: flex; gap: 12px; padding: 14px; margin: 0 0 17px; border-radius: 11px;
   border: 1px solid hsl(0 50% 85%); color: hsl(0 56% 35%); background: hsl(0 70% 98%);
@@ -223,6 +248,9 @@ textarea.field-control { min-height: 158px; padding: 12px 14px; resize: vertical
   .result-body { padding: 20px; }
   .result-empty { min-height: 218px; }
   .topbar { min-height: 67px; }
+  .suggested-reply { padding: 14px; }
+  .suggested-reply-heading { flex-wrap: wrap; }
+  .copy-button { min-height: 40px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }

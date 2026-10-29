@@ -27,6 +27,8 @@ export interface TriageResult {
   Mensagem: string;
   Categoria: string;
   Status: string;
+  /** @nullable */
+  Resposta_sugerida?: string | null;
 }
 
 export interface TriageError {

@@ -35,7 +35,8 @@ export const SubmitTriageResponse = zod.object({
   "Nome": zod.string(),
   "Mensagem": zod.string(),
   "Categoria": zod.string(),
-  "Status": zod.string()
+  "Status": zod.string(),
+  "Resposta_sugerida": zod.string().nullish()
 })
 
 
