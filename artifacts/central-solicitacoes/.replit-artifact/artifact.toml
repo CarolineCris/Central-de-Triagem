@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Central de Solicitações"
+description = "Aplicativo demonstrativo em português para enviar solicitações fictícias a uma integração n8n, apresentar categoria e status retornados e orientar usuários acadêmicos."
+version = "1.0.0"
+id = "artifacts/central-solicitacoes"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 20415
+
+[services.development]
+run = "pnpm --filter @workspace/central-solicitacoes run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/central-solicitacoes", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/central-solicitacoes/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "20415"
+BASE_PATH = "/"

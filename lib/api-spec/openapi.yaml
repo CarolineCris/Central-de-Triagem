@@ -10,6 +10,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: triage
+    description: Classificação de solicitações
 paths:
   /healthz:
     get:
@@ -24,6 +26,42 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /triagem:
+    post:
+      operationId: submitTriage
+      tags: [triage]
+      summary: Classify a request through the n8n webhook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TriageInput"
+      responses:
+        "200":
+          description: Request classified by n8n
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TriageResult"
+        "400":
+          description: Invalid request fields
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TriageError"
+        "502":
+          description: n8n did not return a valid classification
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TriageError"
+        "503":
+          description: n8n integration is not configured
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TriageError"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +71,42 @@ components:
           type: string
       required:
         - status
+    TriageInput:
+      type: object
+      additionalProperties: false
+      properties:
+        nome:
+          type: string
+          minLength: 1
+          maxLength: 100
+        mensagem:
+          type: string
+          minLength: 1
+          maxLength: 2000
+      required:
+        - nome
+        - mensagem
+    TriageResult:
+      type: object
+      properties:
+        Nome:
+          type: string
+        Mensagem:
+          type: string
+        Categoria:
+          type: string
+        Status:
+          type: string
+      required:
+        - Nome
+        - Mensagem
+        - Categoria
+        - Status
+    TriageError:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
 
